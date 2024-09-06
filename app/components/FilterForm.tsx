@@ -26,6 +26,7 @@ import GitLabLogo from "~/components/GitLabLogo"
 import { Multiselect } from "multiselect-react-dropdown"
 import { useTranslatedText } from "~/locale/languageUtility"
 import { useCategories } from "~/hooks/useCategories"
+
 type FilterFormProps = {
   service: Service
   minStars: string
@@ -38,6 +39,7 @@ type FilterFormProps = {
   hasPullRequests: boolean
   showBookmarked: boolean
   isLoading: boolean
+  searchQuery: string // New prop for search query
   onServiceChange: (value: Service) => void
   onMinStarsChange: (value: string) => void
   onMaxStarsChange: (value: string) => void
@@ -48,6 +50,7 @@ type FilterFormProps = {
   onFrameworkChange: (value: string) => void
   onHasPullRequestsChange: (value: boolean) => void
   onShowBookmarkedChange: (value: boolean) => void
+  onSearchQueryChange: (value: string) => void // New handler for search query
   onSubmit: (event: React.FormEvent<HTMLFormElement>) => void
 }
 
@@ -63,6 +66,7 @@ export function FilterForm({
   hasPullRequests,
   showBookmarked,
   isLoading,
+  searchQuery, // New prop
   onServiceChange,
   onMinStarsChange,
   onMaxStarsChange,
@@ -73,6 +77,7 @@ export function FilterForm({
   onFrameworkChange,
   onHasPullRequestsChange,
   onShowBookmarkedChange,
+  onSearchQueryChange, // New handler
   onSubmit,
 }: FilterFormProps) {
   const languageOptions = [
@@ -234,19 +239,16 @@ export function FilterForm({
                             marginRight: "4px",
                           },
                           searchBox: {
-                            // To change search box element look
                             border: "none",
                             display: "flex",
                             flexWrap: "wrap",
                           },
                           inputField: {
-                            // To change input field position or margin
                             padding: language.length === 0 ? "6px" : "0",
                             width: language.length === 0 ? "100%" : "1px",
                             height: "100%",
                           },
                           optionContainer: {
-                            // To Set the dropdown background
                             backgroundColor:
                               theme === "dark" ? "#1F2937" : "white",
                             border: theme === "dark" ? "none" : "",
@@ -260,7 +262,6 @@ export function FilterForm({
                                 : "rgba(0, 0, 0, 0.5) transparent",
                           },
                           option: {
-                            // To change css for dropdown options
                             color: theme === "dark" ? "white" : "black",
                           },
                         }}
@@ -303,6 +304,22 @@ export function FilterForm({
                       value={framework}
                       onChange={(e) => onFrameworkChange(e.target.value)}
                       placeholder="e.g. reactjs, expressjs"
+                      className="bg-white dark:bg-gray-800 text-black dark:text-white p-3 border-2 border-gray-300 dark:border-transparent focus:border-blue-500 focus:outline-none rounded-md transition-colors duration-200"
+                    />
+                  </div>
+
+                  {/* New search bar */}
+                  <div className="space-y-2">
+                    <label htmlFor="searchQuery" className="text-sm font-medium">
+                      {t('filters.search')}
+                    </label>
+                    <Input
+                      type="text"
+                      id="searchQuery"
+                      name="searchQuery"
+                      value={searchQuery}
+                      onChange={(e) => onSearchQueryChange(e.target.value)}
+                      placeholder={t('filters.searchPlaceholder')}
                       className="bg-white dark:bg-gray-800 text-black dark:text-white p-3 border-2 border-gray-300 dark:border-transparent focus:border-blue-500 focus:outline-none rounded-md transition-colors duration-200"
                     />
                   </div>
